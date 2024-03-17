@@ -3,7 +3,7 @@ import { ApiBearerAuth, ApiBody, ApiExtraModels, ApiOperation, ApiResponse, ApiT
 
 import { IsAuthPresenter } from './auth.presenter'
 import { AuthLoginDto } from './validators/auth-dto.class'
-// import { RegisterDto } from './validators/register-dto.class'
+import { RegisterDto } from './validators/register-dto.class'
 
 import { LoginGuard } from '../../common/guards/login.guard'
 import { JwtAuthGuard } from '../../common/guards/jwtAuth.guard'
@@ -29,13 +29,13 @@ import { ApiResponseType } from '../../common/swagger/response.decorator'
 export class AuthController {
   constructor(
     @Inject(UseCasesProxyModule.LOGIN_USECASES_PROXY)
-    private readonly loginUsecaseProxy: UseCaseProxy<LoginUseCases>,
+    private readonly loginUseCaseProxy: UseCaseProxy<LoginUseCases>,
     @Inject(UseCasesProxyModule.LOGOUT_USECASES_PROXY)
-    private readonly logoutUsecaseProxy: UseCaseProxy<LogoutUseCases>,
+    private readonly logoutUseCaseProxy: UseCaseProxy<LogoutUseCases>,
     @Inject(UseCasesProxyModule.IS_AUTHENTICATED_USECASES_PROXY)
-    private readonly isAuthUsecaseProxy: UseCaseProxy<IsAuthenticatedUseCases>,
+    private readonly isAuthUseCaseProxy: UseCaseProxy<IsAuthenticatedUseCases>,
     @Inject(UseCasesProxyModule.REGISTER_USECASES_PROXY)
-    private readonly registerUsecaseProxy: UseCaseProxy<RegisterUseCases>,
+    private readonly registerUseCaseProxy: UseCaseProxy<RegisterUseCases>,
   ) {}
 
   @Post('login')
@@ -44,8 +44,8 @@ export class AuthController {
   @ApiBody({ type: AuthLoginDto })
   @ApiOperation({ description: 'login' })
   async login(@Body() auth: AuthLoginDto, @Request() request: any) {
-    const accessTokenCookie = await this.loginUsecaseProxy.getInstance().getCookieWithJwtToken(auth.username)
-    const refreshTokenCookie = await this.loginUsecaseProxy.getInstance().getCookieWithJwtRefreshToken(auth.username)
+    const accessTokenCookie = await this.loginUseCaseProxy.getInstance().getCookieWithJwtToken(auth.username)
+    const refreshTokenCookie = await this.loginUseCaseProxy.getInstance().getCookieWithJwtRefreshToken(auth.username)
     request.res.setHeader('Set-Cookie', [accessTokenCookie, refreshTokenCookie])
     return 'Login successful'
   }
@@ -54,7 +54,7 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   @ApiOperation({ description: 'logout' })
   async logout(@Request() request: any) {
-    const cookie = await this.logoutUsecaseProxy.getInstance().execute()
+    const cookie = await this.logoutUseCaseProxy.getInstance().execute()
     request.res.setHeader('Set-Cookie', cookie)
     return 'Logout successful'
   }
@@ -65,7 +65,7 @@ export class AuthController {
   @ApiOperation({ description: 'is_authenticated' })
   @ApiResponseType(IsAuthPresenter, false)
   async isAuthenticated(@Req() request: any) {
-    const user = await this.isAuthUsecaseProxy.getInstance().execute(request.user.username)
+    const user = await this.isAuthUseCaseProxy.getInstance().execute(request.user.username)
     const response = new IsAuthPresenter()
     response.username = user.username
     return response
@@ -75,18 +75,19 @@ export class AuthController {
   @UseGuards(JwtRefreshGuard)
   @ApiBearerAuth()
   async refresh(@Req() request: any) {
-    const accessTokenCookie = await this.loginUsecaseProxy.getInstance().getCookieWithJwtToken(request.user.username)
+    const accessTokenCookie = await this.loginUseCaseProxy.getInstance().getCookieWithJwtToken(request.user.username)
     request.res.setHeader('Set-Cookie', accessTokenCookie)
     return 'Refresh successful'
   }
 
-  // @Post('register')
-  // @UseGuards(LoginGuard)
-  // @ApiBearerAuth()
-  // @ApiBody({ type: AuthLoginDto })
-  // @ApiOperation({ description: 'register' })
-  // async register(@Req() request: RegisterDto) {
-  //   const user = await this.registerUsecaseProxy.getInstance()
-  //   return 'Registered'
-  // }
+  @Post('register')
+  @UseGuards(LoginGuard)
+  @ApiBearerAuth()
+  @ApiBody({ type: AuthLoginDto })
+  @ApiOperation({ description: 'register' })
+  async register(@Req() request: RegisterDto) {
+    const user = await this.registerUseCaseProxy.getInstance().execute()
+    console.log(user, request)
+    return 'Registered'
+  }
 }

@@ -6,14 +6,11 @@ import { UserRepositoryI } from '../../domain/repositories/userRepository.interf
 
 @Injectable()
 export class DatabaseUserRepository extends PrismaRepository<'user'> implements UserRepositoryI {
-  constructor(
-    protected readonly prisma: PrismaService,
-    private readonly userEntity: PrismaRepository<'user'>,
-  ) {
+  constructor(protected readonly prisma: PrismaService) {
     super(prisma)
   }
   async updateRefreshToken(username: string, refreshToken: string): Promise<void> {
-    await this.userEntity.update({
+    await this.prisma.user.update({
       where: {
         username: username,
       },
@@ -23,18 +20,19 @@ export class DatabaseUserRepository extends PrismaRepository<'user'> implements 
     })
   }
   async getUserByUsername(username: string): Promise<User | null> {
-    const adminUserEntity = await this.userEntity.findFirst({
+    const adminUserEntity = await this.prisma.user.findFirst({
       where: {
         username: username,
       },
     })
+    console.log(adminUserEntity)
     if (!adminUserEntity) {
       return null
     }
     return adminUserEntity
   }
   async updateLastLogin(username: string): Promise<void> {
-    await this.userEntity.update({
+    await this.prisma.user.update({
       where: {
         username: username,
       },

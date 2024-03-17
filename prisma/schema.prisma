@@ -18,7 +18,7 @@ enum UserStatus {
   INACTIVE
 }
 
-model User {
+model Users {
   id               String     @id @default(uuid()) @db.Uuid
   username         String     @unique @db.VarChar(20)
   password         String
@@ -29,8 +29,8 @@ model User {
   status           UserStatus
   createdAt        DateTime   @default(now()) @map("created_at")
   updatedAt        DateTime   @default(now()) @updatedAt @map("updated_at")
-  lastLogin        DateTime   @map("last_login")
+  lastLogin        DateTime   @default(now()) @updatedAt @map("last_login")
   hashRefreshToken String?    @map("hash_refresh_token")
 
-  @@map("user")
+  @@map("users")
 }

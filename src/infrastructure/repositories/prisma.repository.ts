@@ -1,10 +1,7 @@
 import { PrismaClient } from '@prisma/client'
 import { PrismaService } from '../config/prisma/prisma.service'
-import { PrismaRepositoryI } from '../../domain/repositories/prismaRepository.interface'
 
-export class PrismaRepository<K extends Exclude<keyof PrismaClient, symbol | `$${string}`>>
-  implements PrismaRepositoryI<K>
-{
+export class PrismaRepository<K extends Exclude<keyof PrismaClient, symbol | `$${string}`>> {
   private readonly model!: K
 
   constructor(protected readonly prisma: PrismaService) {}
@@ -34,7 +31,8 @@ export class PrismaRepository<K extends Exclude<keyof PrismaClient, symbol | `$$
   }
 
   findFirstOrThrow(...args: Parameters<PrismaClient[K]['findFirstOrThrow']>) {
-    return (this.prisma[this.model].findFirstOrThrow as any)(...args)
+    console.log(this.model)
+    return (this.prisma.user.findFirstOrThrow as any)(...args)
   }
 
   findMany(...args: Parameters<PrismaClient[K]['findMany']>) {

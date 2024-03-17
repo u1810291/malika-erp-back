@@ -14,6 +14,7 @@ export class LoginUseCases {
   ) {}
 
   async getCookieWithJwtToken(username: string) {
+    console.log(username)
     this.logger.log('LoginUseCases execute', `The user ${username} have been logged.`)
     const payload: IJwtServicePayload = { username: username }
     const secret = this.jwtConfig.getJwtSecret()

@@ -27,10 +27,10 @@ import { IsAuthenticatedUseCases } from '../../usecases/auth/isAuthenticated.use
 export class UseCasesProxyModule {
   // Auth
   static LOGIN_USECASES_PROXY = 'LoginUseCasesProxy'
-  static IS_AUTHENTICATED_USECASES_PROXY = 'IsAuthenticatedUseCasesProxy'
   static LOGOUT_USECASES_PROXY = 'LogoutUseCasesProxy'
-  static GET_USER_BY_USERNAME_USECASES_PROXY = 'GetUserByUsernameUseCasesProxy'
   static REGISTER_USECASES_PROXY = 'RegisterUseCasesProxy'
+  static IS_AUTHENTICATED_USECASES_PROXY = 'IsAuthenticatedUseCasesProxy'
+  static GET_USER_BY_USERNAME_USECASES_PROXY = 'GetUserByUsernameUseCasesProxy'
 
   static register(): DynamicModule {
     return {
@@ -71,8 +71,9 @@ export class UseCasesProxyModule {
       ],
       exports: [
         UseCasesProxyModule.LOGIN_USECASES_PROXY,
-        UseCasesProxyModule.IS_AUTHENTICATED_USECASES_PROXY,
         UseCasesProxyModule.LOGOUT_USECASES_PROXY,
+        UseCasesProxyModule.REGISTER_USECASES_PROXY,
+        UseCasesProxyModule.IS_AUTHENTICATED_USECASES_PROXY,
       ],
     }
   }
