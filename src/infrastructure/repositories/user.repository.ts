@@ -26,7 +26,6 @@ export class DatabaseUserRepository extends PrismaRepository<'users'> {
         username: username,
       },
     })
-    console.log(adminUserEntity)
     if (!adminUserEntity) {
       return null
     }
