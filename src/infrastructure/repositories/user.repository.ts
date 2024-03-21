@@ -1,16 +1,17 @@
 import { Injectable } from '@nestjs/common'
 import { PrismaRepository } from './prisma.repository'
 import { PrismaService } from '../config/prisma/prisma.service'
-import { User } from '@prisma/client'
-import { UserRepositoryI } from '../../domain/repositories/userRepository.interface'
+import { Users } from '@prisma/client'
+// import { UserRepositoryI } from '../../domain/repositories/userRepository.interface'
+// import { ConfigService } from '@nestjs/config'
 
 @Injectable()
-export class DatabaseUserRepository extends PrismaRepository<'user'> implements UserRepositoryI {
+export class DatabaseUserRepository extends PrismaRepository<'users'> {
   constructor(protected readonly prisma: PrismaService) {
-    super(prisma)
+    super(prisma, 'users')
   }
   async updateRefreshToken(username: string, refreshToken: string): Promise<void> {
-    await this.prisma.user.update({
+    await this.update({
       where: {
         username: username,
       },
@@ -19,8 +20,8 @@ export class DatabaseUserRepository extends PrismaRepository<'user'> implements 
       },
     })
   }
-  async getUserByUsername(username: string): Promise<User | null> {
-    const adminUserEntity = await this.prisma.user.findFirst({
+  async getUserByUsername(username: string): Promise<Users | null> {
+    const adminUserEntity = await this.findFirst({
       where: {
         username: username,
       },
@@ -32,7 +33,7 @@ export class DatabaseUserRepository extends PrismaRepository<'user'> implements 
     return adminUserEntity
   }
   async updateLastLogin(username: string): Promise<void> {
-    await this.prisma.user.update({
+    await this.update({
       where: {
         username: username,
       },

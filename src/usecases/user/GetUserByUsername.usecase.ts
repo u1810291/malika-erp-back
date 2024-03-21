@@ -1,4 +1,4 @@
-import { User } from '@prisma/client'
+import { Users } from '@prisma/client'
 import { ILogger } from '../../domain/logger/logger.interface'
 import { UserRepositoryI } from '../../domain/repositories/userRepository.interface'
 
@@ -8,7 +8,7 @@ export class GetUserByUsername {
     private readonly userRepository: UserRepositoryI,
   ) {}
 
-  async execute(username: string): Promise<User> {
+  async execute(username: string): Promise<Users> {
     const result = await this.userRepository.getUserByUsername(username)
     this.logger.log('GetUserByUsernameUseCases execute', 'New todo have been inserted')
     return result

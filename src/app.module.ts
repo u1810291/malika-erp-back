@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common'
 import { JwtModule } from '@nestjs/jwt'
 import { ConfigModule } from '@nestjs/config'
 import { PassportModule } from '@nestjs/passport'
+
 import configuration from './infrastructure/config'
 import { LoggerModule } from './infrastructure/logger/logger.module'
 import { JwtStrategy } from './infrastructure/common/strategies/jwt.strategy'
