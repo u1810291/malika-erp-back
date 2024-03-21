@@ -22,6 +22,5 @@ const config: DataSourceOptions = {
   // },
 }
 
-console.log(config)
 
 export default config

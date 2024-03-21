@@ -11,9 +11,6 @@ export class BcryptService implements IBcryptService {
   }
 
   async compare(password: string, hashPassword: string): Promise<boolean> {
-    const result = await bcrypt.compare(password, hashPassword)
-    const hashed = await this.hash(password)
-    console.log(password, hashPassword, result, hashed)
-    return result
+    return await bcrypt.compare(password, hashPassword)
   }
 }

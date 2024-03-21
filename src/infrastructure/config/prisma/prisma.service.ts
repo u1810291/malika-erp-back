@@ -1,16 +1,14 @@
 import { Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common'
 import { PrismaClient } from '@prisma/client'
-import { ConfigService } from '@nestjs/config'
+import { EnvironmentConfigService } from '../environment-config/environment-config.service'
 
 @Injectable()
 export class PrismaService extends PrismaClient implements OnModuleInit, OnModuleDestroy {
-  constructor(configService: ConfigService) {
-    const dbConfig = configService.get<{ url: string }>('database')
+  constructor(environmentConfig: EnvironmentConfigService) {
+    const url = environmentConfig.getDatabaseUrl()
     super({
       datasources: {
-        db: {
-          url: dbConfig.url,
-        },
+        db: { url },
       },
     })
   }
