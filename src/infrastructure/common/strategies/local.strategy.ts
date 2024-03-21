@@ -1,17 +1,17 @@
 import { Strategy } from 'passport-local'
 import { PassportStrategy } from '@nestjs/passport'
 import { Inject, Injectable } from '@nestjs/common'
-import { UseCasesProxyModule } from '../../usecases-proxy/usecases-proxy.module'
 import { UseCaseProxy } from '../../usecases-proxy/usecases-proxy'
 import { LoginUseCases } from '../../../usecases/auth/login.usecases'
 import { LoggerService } from '../../logger/logger.service'
 import { ExceptionsService } from '../../exceptions/exceptions.service'
+import { Symbols } from '../../../domain/symbols'
 // import { TokenPayload } from '../../../domain/model/auth'
 
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy) {
   constructor(
-    @Inject(UseCasesProxyModule.LOGIN_USECASES_PROXY)
+    @Inject(Symbols.LOGIN_USECASES_PROXY)
     private readonly loginUseCaseProxy: UseCaseProxy<LoginUseCases>,
     private readonly logger: LoggerService,
     private readonly exceptionService: ExceptionsService,

@@ -20,30 +20,24 @@ import { LoginUseCases } from '../../usecases/auth/login.usecases'
 import { LogoutUseCases } from '../../usecases/auth/logout.usecases'
 import { RegisterUseCases } from '../../usecases/auth/register.usecases'
 import { IsAuthenticatedUseCases } from '../../usecases/auth/isAuthenticated.usecases'
+import { Symbols } from '../../domain/symbols'
 
 @Module({
   imports: [LoggerModule, JwtModule, BcryptModule, EnvironmentConfigModule, RepositoriesModule, ExceptionsModule],
 })
 export class UseCasesProxyModule {
-  // Auth
-  static LOGIN_USECASES_PROXY = 'LoginUseCasesProxy'
-  static LOGOUT_USECASES_PROXY = 'LogoutUseCasesProxy'
-  static REGISTER_USECASES_PROXY = 'RegisterUseCasesProxy'
-  static IS_AUTHENTICATED_USECASES_PROXY = 'IsAuthenticatedUseCasesProxy'
-  static GET_USER_BY_USERNAME_USECASES_PROXY = 'GetUserByUsernameUseCasesProxy'
-
   static register(): DynamicModule {
     return {
       module: UseCasesProxyModule,
       providers: [
         {
           inject: [LoggerService, JwtTokenService, EnvironmentConfigService, DatabaseUserRepository, BcryptService],
-          provide: UseCasesProxyModule.REGISTER_USECASES_PROXY,
+          provide: Symbols.REGISTER_USECASES_PROXY,
           useFactory: () => new UseCaseProxy(new RegisterUseCases()),
         },
         {
           inject: [LoggerService, JwtTokenService, EnvironmentConfigService, DatabaseUserRepository, BcryptService],
-          provide: UseCasesProxyModule.LOGIN_USECASES_PROXY,
+          provide: Symbols.LOGIN_USECASES_PROXY,
           useFactory: (
             logger: LoggerService,
             jwtTokenService: JwtTokenService,
@@ -54,26 +48,26 @@ export class UseCasesProxyModule {
         },
         {
           inject: [DatabaseUserRepository],
-          provide: UseCasesProxyModule.IS_AUTHENTICATED_USECASES_PROXY,
+          provide: Symbols.IS_AUTHENTICATED_USECASES_PROXY,
           useFactory: (userRepo: DatabaseUserRepository) => new UseCaseProxy(new IsAuthenticatedUseCases(userRepo)),
         },
         {
           inject: [],
-          provide: UseCasesProxyModule.LOGOUT_USECASES_PROXY,
+          provide: Symbols.LOGOUT_USECASES_PROXY,
           useFactory: () => new UseCaseProxy(new LogoutUseCases()),
         },
         {
           inject: [LoggerService, DatabaseUserRepository],
-          provide: UseCasesProxyModule.GET_USER_BY_USERNAME_USECASES_PROXY,
+          provide: Symbols.GET_USER_BY_USERNAME_USECASES_PROXY,
           useFactory: (logger: LoggerService, userRepository: DatabaseUserRepository) =>
             new UseCaseProxy(new GetUserByUsername(logger, userRepository)),
         },
       ],
       exports: [
-        UseCasesProxyModule.LOGIN_USECASES_PROXY,
-        UseCasesProxyModule.LOGOUT_USECASES_PROXY,
-        UseCasesProxyModule.REGISTER_USECASES_PROXY,
-        UseCasesProxyModule.IS_AUTHENTICATED_USECASES_PROXY,
+        Symbols.LOGIN_USECASES_PROXY,
+        Symbols.LOGOUT_USECASES_PROXY,
+        Symbols.REGISTER_USECASES_PROXY,
+        Symbols.IS_AUTHENTICATED_USECASES_PROXY,
       ],
     }
   }

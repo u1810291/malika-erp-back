@@ -3,18 +3,18 @@ import { PassportStrategy } from '@nestjs/passport'
 import { Inject, Injectable } from '@nestjs/common'
 import { Request } from 'express'
 import { EnvironmentConfigService } from '../../config/environment-config/environment-config.service'
-import { UseCasesProxyModule } from '../../usecases-proxy/usecases-proxy.module'
 import { UseCaseProxy } from '../../usecases-proxy/usecases-proxy'
 import { LoginUseCases } from '../../../usecases/auth/login.usecases'
 import { TokenPayload } from '../../../domain/model/auth'
 import { LoggerService } from '../../logger/logger.service'
 import { ExceptionsService } from '../../exceptions/exceptions.service'
+import { Symbols } from '../../../domain/symbols'
 
 @Injectable()
 export class JwtRefreshTokenStrategy extends PassportStrategy(Strategy, 'jwt-refresh-token') {
   constructor(
     private readonly configService: EnvironmentConfigService,
-    @Inject(UseCasesProxyModule.LOGIN_USECASES_PROXY)
+    @Inject(Symbols.LOGIN_USECASES_PROXY)
     private readonly loginUseCaseProxy: UseCaseProxy<LoginUseCases>,
     private readonly logger: LoggerService,
     private readonly exceptionService: ExceptionsService,

@@ -13,10 +13,10 @@ import { UseCaseProxy } from '../../usecases-proxy/usecases-proxy'
 import { LoginUseCases } from '../../../usecases/auth/login.usecases'
 import { LogoutUseCases } from '../../../usecases/auth/logout.usecases'
 import { RegisterUseCases } from '../../../usecases/auth/register.usecases'
-import { UseCasesProxyModule } from '../../usecases-proxy/usecases-proxy.module'
 import { IsAuthenticatedUseCases } from '../../../usecases/auth/isAuthenticated.usecases'
 
 import { ApiResponseType } from '../../common/swagger/response.decorator'
+import { Symbols } from '../../../domain/symbols'
 
 @Controller('auth')
 @ApiTags('auth')
@@ -28,13 +28,13 @@ import { ApiResponseType } from '../../common/swagger/response.decorator'
 @ApiExtraModels(IsAuthPresenter)
 export class AuthController {
   constructor(
-    @Inject(UseCasesProxyModule.LOGIN_USECASES_PROXY)
+    @Inject(Symbols.LOGIN_USECASES_PROXY)
     private readonly loginUseCaseProxy: UseCaseProxy<LoginUseCases>,
-    @Inject(UseCasesProxyModule.LOGOUT_USECASES_PROXY)
+    @Inject(Symbols.LOGOUT_USECASES_PROXY)
     private readonly logoutUseCaseProxy: UseCaseProxy<LogoutUseCases>,
-    @Inject(UseCasesProxyModule.IS_AUTHENTICATED_USECASES_PROXY)
+    @Inject(Symbols.IS_AUTHENTICATED_USECASES_PROXY)
     private readonly isAuthUseCaseProxy: UseCaseProxy<IsAuthenticatedUseCases>,
-    @Inject(UseCasesProxyModule.REGISTER_USECASES_PROXY)
+    @Inject(Symbols.REGISTER_USECASES_PROXY)
     private readonly registerUseCaseProxy: UseCaseProxy<RegisterUseCases>,
   ) {}
 
