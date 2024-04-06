@@ -27,7 +27,7 @@ async function bootstrap() {
   app.useGlobalInterceptors(new ResponseInterceptor())
 
   // base routing
-  app.setGlobalPrefix('api_v1')
+  app.setGlobalPrefix('v1')
 
   // swagger config
   if (env !== 'production') {
